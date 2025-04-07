@@ -1,0 +1,84 @@
+#success_message {
+    background: #def1d8;
+    color: green;
+    padding: 10px;
+    margin: 10px;
+    display: none;
+    position: absolute;
+    right: 3rem;
+    top: -0.4rem;
+}
+
+#error_message {
+    background: #efdcdd;
+    color: red;
+    padding: 10px;
+    margin: 10px;
+    display: none;
+    position: absolute;
+    right: 6rem;
+    top: -2.4rem;
+}
+.cloth_id{
+    display: none;
+}
+td:first-child.idi{
+    display: none;
+}
+#page-header .row{
+    width:100%;
+}
+#page-header .row .form-group {
+    margin-bottom: 0;
+    margin-right: 0.4rem;
+  }
+  #page-header .row .btn-submit{
+    padding: 5px 10px;
+  }
+  #page-header #add_product{
+    display: flex;
+    flex-wrap: wrap;
+    float: right;
+  }
+
+.submenu-active {
+    color: blue;
+}
+
+#employee_name a{
+  border:1px solid #ebebeb; 
+  border-radius:5px;
+  padding-left: 8px;
+}
+
+.form-group select:focus{
+  border-color: #ff9f43;
+  background: #fff;
+  box-shadow:none;
+}
+
+.form-group .form-select{
+  font-size:0.9rem;
+  padding: 0.5rem 0.5rem;
+}
+.form-group input[type="date"], .form-group select {
+  border: 1px solid rgba(145,158,171,.32);
+  height: 40px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  color: #637381;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+/* eliminate margin top of show per page div */
+.dataTables_length{
+  margin-top: 0 !important;
+  padding-bottom: 1rem;
+}
+.dataTables_filter{
+  padding-bottom: 1rem;
+
+}
+
+
