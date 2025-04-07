@@ -884,27 +884,6 @@ if(isset($_POST['action']) && $_POST['action']=== 'fetch_product_name'){
     }
     exit;
 }
-// fetch product rate and show in add new order form
-// if(isset($_POST['action']) && $_POST['action']=== 'fetch_product_rate'){
-//     if (isset($_POST['product_rate'])) {
-//         $product = $_POST['product_rate'];
-
-//         $query = "SELECT p_price FROM product_price WHERE name = '$product'";
-//         $result = mysqli_query($conn, $query);
-
-//         // if ($row = mysqli_fetch_assoc($result)) {
-//         //     echo $row['p_price']; // Return product price
-//         // } else {
-//         //     echo "0"; // Default value if no product found
-//         // }
-//         if ($row = mysqli_fetch_assoc($result)) {
-//             echo json_encode(["price" => $row['p_price'], "query" => $query]); // Return price & query for debugging
-//         } else {
-//             echo json_encode(["price" => "0", "query" => $query]); // Return 0 if no product found
-//         }
-//     }
-// }
-
     // Fetch all products on page load
     // / Check if this is a product fetch request
 if (isset($_GET['action']) && $_GET['action'] == "fetch_product_list") {
@@ -1026,7 +1005,144 @@ if (isset($_POST['action']) && $_POST['action'] == "fetch_product_rate" && isset
         }
     }
 }
+// create a gate pass pdf for vendor through mPDF Library
+$showAlert = false;
+$showError = false;
 
+
+if (isset($_POST['action']) && trim($_POST['action']) === 'gatePass_pdf_file_by_ajax') {
+    if (isset($_POST['pass_date'], $_POST['gatePass_vendor']) &&
+        trim($_POST['pass_date']) !== '' && trim($_POST['gatePass_vendor']) !== '' ) {
+        
+        // Assign POST values to variables
+        $pass_date = $_POST['pass_date'];
+        $gatePass_vendor = $_POST['gatePass_vendor'];
+
+        // Create registration number randomly
+        // $reg_no = 'SM_' . rand(10,100) . date('Yd');
+        $reg_no = rand(20,100) . date('Yd');
+        // print_r($reg_no);
+        // die();
+        $pass_query = "SELECT * FROM `productout` WHERE `date` = '$pass_date' AND `vendor_name` = '$gatePass_vendor' ";
+        $gatePass_table_data = mysqli_query($conn, $pass_query);
+        $gatePass_row = mysqli_num_rows($gatePass_table_data);
+       
+        // PDF generation logic
+        
+        $random_gatepass_number = 'SM-' . date('ymds') . '-' . rand(1, 99999); // Generate a random gatepass number
+        $current_date = date('Y-m-d');
+        $html = "<table><tbody>
+                    <tr>
+                        <td style='width:10%;'></td>
+                        <td><img src='assets/img/logo.jpg' alt='Darat ul Balad logo' width=30% height=7%></td>
+                        <td><h1 style='letter-spacing: 5px; cellspacing: 15; cellpadding: 5;'>DURAT AL BALAD</h1></td>
+                    </tr>
+                </tbody></table>";
+        $html .= "<h5 style='text-align: center; text-decoration: underline;'>GATE PASS FOR PRODUCT OUT</h5>";
+
+        // Add lines with labels
+            $html .= "<table width='100%' style='margin: 20 0 20 0;'>
+                <tr>
+                    <td style='width: 7%;'><strong>GP#:</strong></td>
+                    <td style='width: 10%;'><strong> $random_gatepass_number</strong></td>
+                    <td style='width: 10%;'><strong>Dated:</strong></td>
+                    <td style='width: 20%;'><strong>$current_date</strong></td>
+                    <td style='width: 20%;'><strong>Vendor Name:</strong></td>
+                    <td style='width: 40%;'><h3 style='font-family: xbriyaz; text-transform: capitalize;font-size:1.5rem;'>$gatePass_vendor</h3></td>
+                </tr>
+            </table>";
+
+
+        $html .=    "<table width='100%' class='table'>
+                            <tr>
+                                <th style='font-size: 22px; font-weight: bold;padding-bottom: 10px;'>Sr.No.</th>
+                                <th style='font-size: 22px; font-weight: bold;padding-bottom: 10px;'>Code#</th>
+                                <th style='font-size: 22px; font-weight: bold;padding-bottom: 10px;'>Product Name</th>
+                                <th style='font-size: 22px; font-weight: bold;padding-bottom: 10px;'>Piece</th>
+                            </tr>
+                    <tbody>";
+            $count = 0;
+            while ($rows = mysqli_fetch_assoc($gatePass_table_data)) {
+                $rowStyle = ($count % 2 == 0) ? "background-color: #f2f2f2;" : ""; //it is used to add striped gray line for even rows for each tr tag
+                $html .= "<tr style='$rowStyle'>
+                            <td style='text-align: center;'>" . ++$count . "</td>
+                            <td style='text-align: center;'>" . $rows['code'] . "</td>
+                            <td style='text-align: center; font-family: lateef;font-size:1.8rem;'><span style=''>" . $rows['name'] . "</span></td>
+                            <td style='text-align: center;'>" . $rows['qty'] . "</td>
+                        </tr>";
+            }
+            $html .= "</tbody></table>";
+        
+        // Add lines with labels as footer
+        $html .= "<table width='100%' style='border-collapse: collapse; margin-top:40px;'>
+                    <tr>
+                        <td style='width: 25%; font-size: 16px;'><strong>Managed By:</strong></td>
+                        <td style='width: 25%;'></td>
+                        <td style='width: 25%; font-size: 16px;'><strong>Delivered By:</strong></td>
+                        <td style='width: 25%;'></td>
+                    </tr>
+                    <tr>
+                        <td style='font-size: 12px; width:5%; padding-top:20px;'><strong>Name:</strong></td>
+                        <td style='padding: 20 20 0 0;'>
+                            <hr style='width: 100%; border: 2px solid black; margin: 0;'>
+                        </td>
+                        <td style='font-size: 12px;padding-top:20px;'><strong>Name:</strong></td>
+                        <td style='padding-top:20px;'>
+                            <hr style='width: 100%; border: 2px solid black; margin: 0;'>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='font-size: 12px; padding-top:30px;'><strong>Signature:</strong></td>
+                        <td style=' padding:30 20 0 0;'>
+                            <hr style='width: 100%; border: 2px solid black;'>
+                        </td>
+                        <td style='font-size: 12px; padding-top:30px;'><strong>Signature:</strong></td>
+                        <td style='padding-top:30px;'>
+                            <hr style='width: 100%; border: 2px solid black;'>
+                        </td>
+                    </tr>
+                </table>";
+        $html .= "<table width='100%' style='border-collapse: collapse; margin-top:40px;'>
+                    <tr>
+                        <td style='width: 20%; font-size: 16px;'><strong>Received By:</strong></td>
+                         <td style='font-size: 12px; width:10%;'><strong>Vendor Name:</strong></td>
+                        <td>
+                            <hr style='width: 100%; border: 2px solid black; margin: 0;'>
+                        </td>                
+                         <td style='font-size: 12px; width:10%;'><strong>Signature:</strong></td>
+                        <td>
+                            <hr style='width: 100%; border: 2px solid black;'>
+                        </td>                
+                    </tr>
+                     
+                    
+                </table>";
+        $html .= "<table width='100%' style='margin-top:10px;'>
+                    <tr style='width:100%;'>
+                        <td><strong>Note:</strong>Goods/Items checked & received as per above list & found correct.</td>
+                    </tr>
+                </table>";
+
+        $mpdf = new \Mpdf\Mpdf(['format' => 'A4']); // Create an object named $mpdf, and A4 size with landscape orientation
+       
+        // $mpdf->WriteHTML($styleSheet, \Mpdf\HTMLParserMode::HEADER_CSS);
+        // Write $html content to PDF using above created object $mpdf
+        $mpdf->WriteHTML($html);
+        
+        // Define PDF file name
+        $pdf_file_name = "Gate Pass_" . $pass_date . ".pdf";
+        // Output the PDF file
+        $mpdf->Output($pdf_file_name, \Mpdf\Output\Destination::FILE);
+        
+        // $pdf_path = "mpdf data";
+        echo json_encode(array('success' => true, 'pdfUrl' => $pdf_file_name));
+        
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'All fields are required'));
+        exit();
+    }
+    exit;
+}
 
 
 

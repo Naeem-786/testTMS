@@ -2,17 +2,6 @@
 <?php include('assets/includes/header.php'); ?>
 <?php include('./connect.php');?>
 <?php
-// if (!isset($_SESSION['auth'])) {
-//     header("Location: index.php");
-//     exit();
-// }
-    // $stock_packing ="SELECT c.code, c.name, (COALESCE(c.total_qty, 0) - COALESCE(s.total_qty, 0)) AS remaining_qty FROM ( SELECT code, name, SUM(piece) AS total_qty FROM packing GROUP BY code, name ) c LEFT JOIN ( SELECT code, name, SUM(qty) AS total_qty FROM productout GROUP BY code, name ) s ON c.code = s.code AND c.name = s.name";
-
-    // $sql_query = mysqli_query($conn, $stock_packing);
-    // $result = mysqli_fetch_assoc($sql_query);
-    // $total_available = $result['SUM(remaining_qty)'];
-    // var_dump($total_available);
-
 
       // ******   PHP CODE FOR TMS  ********
     // <--- TO GET TOTAL ORDERS WHICH ARE BEING DELIVERED AFTER 2 DAYS 1 DAYS AND CURRENT DAY --->
