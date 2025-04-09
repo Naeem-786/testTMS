@@ -101,7 +101,7 @@
                                                             <td class='td_style'>".htmlspecialchars($row['delivery_date'])."</td>
                                                             <td class='td_style'>".htmlspecialchars($row['progress_suit'])."</td>
                                                             <td>
-                                                                <a class='me-3 edit_btn' href='/SM-IMS/pay_invoice.php?id=".urlencode($row['id'])."'><img src='assets/img/icons/dash2.svg' alt='img'></a>
+                                                                <a class='me-3 edit_btn' href='/SM-IMS/testTMS/pay_invoice.php?id=".urlencode($row['id'])."'><img src='assets/img/icons/dash2.svg' alt='img'></a>
                                                                 <button type='button' class='btn btn-danger delete_btn' style='background:transparent; border:none;' value='".htmlspecialchars($row['id'])."'>
                                                                     <img src='assets/img/icons/delete.svg' alt='img'>
                                                                 </button>

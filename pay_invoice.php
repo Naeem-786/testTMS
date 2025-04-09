@@ -65,11 +65,11 @@ if(isset($_POST['final_bill'])){
             
             $_SESSION['success'] = "Order #$suit_no : Bill paid successfully!";
             // header("Location: ready_for_delivery.php");
-            echo "<meta http-equiv='refresh' content='0; url=http://localhost/SM-IMS/ready_for_delivery.php' />";
+            echo "<meta http-equiv='refresh' content='0; url=http://localhost/SM-IMS/testTMS/ready_for_delivery.php' />";
             exit();
         } else {
             echo "<script>alert('Error: Bill not paid. " . mysqli_error($conn) . "');</script>";
-            echo "<meta http-equiv='refresh' content='0; url=http://localhost/SM-IMS/ready_for_delivery.php' />";
+            echo "<meta http-equiv='refresh' content='0; url=http://localhost/SM-IMS/testTMS/ready_for_delivery.php' />";
             exit();
         }
     }else{
@@ -86,7 +86,7 @@ if(isset($_POST['final_bill'])){
                 <div class="page-header">
                     <div class="col-lg-6">
                         <div class="page-title">
-                            <h4>Edit Invoice </h4>
+                            <h4>Pay Your Bill </h4>
                             <h6>Finalize Client Payment</h6>
                         </div>
                     </div>

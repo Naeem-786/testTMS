@@ -4,56 +4,102 @@
 <?php
     $showAlert=false;
     $showError=false;
-     if(isset($_POST['add_new_order'])){
-        if((isset($_POST['client_name']) && ($_POST['cnic']) && ($_POST['phone']) && ($_POST['stitching_type']) && ($_POST['delivery_date']) && ($_POST['delivery_type']) && ($_POST['product']) && ($_POST['rate'])&& ($_POST['quantity']) && ($_POST['sub_total']) && ($_POST['paid_amount']) && ($_POST['due_amount']) && ($_POST['progress_suit']))
-        && trim($_POST['client_name']) !=='' && trim($_POST['cnic'])!=='' && trim($_POST['phone'])!=='' && trim($_POST['stitching_type'])!=='' && trim($_POST['delivery_date'])!=='' && trim($_POST['delivery_type'])!=='' && trim($_POST['product'])!=='' && trim($_POST['rate'])!=='' && trim($_POST['quantity'])!=='' && trim($_POST['sub_total'])!=='' && trim($_POST['paid_amount'])!=='' && trim($_POST['due_amount'])!=='' && trim($_POST['progress_suit'])!==''
-        ){
-            //     &&
-            // 
+    //  if(isset($_POST['add_new_order'])){
+    //     if((isset($_POST['client_name']) && ($_POST['cnic']) && ($_POST['phone']) && ($_POST['stitching_type']) && ($_POST['delivery_date']) && ($_POST['delivery_type']) && ($_POST['product']) && ($_POST['rate'])&& ($_POST['quantity']) && ($_POST['sub_total']) && ($_POST['paid_amount']) && ($_POST['due_amount']) && ($_POST['progress_suit']))
+    //     && trim($_POST['client_name']) !=='' && trim($_POST['cnic'])!=='' && trim($_POST['phone'])!=='' && trim($_POST['stitching_type'])!=='' && trim($_POST['delivery_date'])!=='' && trim($_POST['delivery_type'])!=='' && trim($_POST['product'])!=='' && trim($_POST['rate'])!=='' && trim($_POST['quantity'])!=='' && trim($_POST['sub_total'])!==''  && trim($_POST['due_amount'])!=='' && trim($_POST['progress_suit'])!==''
+    //     ){
+    //         //     &&
+    //         // 
             
-            // $random_gatepass_number = 'SM-' . date('ymds') . '-' . rand(1, 99999); // Generate a random gatepass number
+    //         // $random_gatepass_number = 'SM-' . date('ymds') . '-' . rand(1, 99999); // Generate a random gatepass number
 
-            // $suit_no = $random_gatepass_number;
+    //         // $suit_no = $random_gatepass_number;
 
-            // $paid_amount = isset($_POST['paid_amount']) ? trim($_POST['paid_amount']) : '0';
+    //         // $paid_amount = isset($_POST['paid_amount']) ? trim($_POST['paid_amount']) : '0';
 
-            // // Ensure the value is numeric and defaults to 0 if empty
-            // if ($paid_amount === "" || !is_numeric($paid_amount)) {
-            //     $paid_amount = 0;
-            // }
+    //         // // Ensure the value is numeric and defaults to 0 if empty
+    //         // if ($paid_amount === "" || !is_numeric($paid_amount)) {
+    //         //     $paid_amount = 0;
+    //         // }
 
-            $client_name = $_POST['client_name'];
-            $cnic = $_POST['cnic'];
-            $phone = $_POST['phone'];
-            $stitching_type = $_POST['stitching_type'];
-            $delivery_date = $_POST['delivery_date'];
+    //         $client_name = $_POST['client_name'];
+    //         $cnic = $_POST['cnic'];
+    //         $phone = $_POST['phone'];
+    //         $stitching_type = $_POST['stitching_type'];
+    //         $delivery_date = $_POST['delivery_date'];
 
-            $delivery_type = $_POST['delivery_type'];
-            $product = $_POST['product'];
-            $rate = $_POST['rate'];
+    //         $delivery_type = $_POST['delivery_type'];
+    //         $product = $_POST['product'];
+    //         $rate = $_POST['rate'];
 
-            $quantity = $_POST['quantity'];
-            $sub_total = $_POST['sub_total'];
+    //         $quantity = $_POST['quantity'];
+    //         $sub_total = $_POST['sub_total'];
 
-            $paid_amount= $_POST['paid_amount'];
-            $due_amount = $_POST['due_amount'];
-            $progress_suit = $_POST['progress_suit'];
-            // var_dump($client_no);
+    //         $paid_amount= $_POST['paid_amount'];
+    //         $due_amount = $_POST['due_amount'];
+    //         $progress_suit = $_POST['progress_suit'];
+    //         // var_dump($client_no);
 
-                $sql = "INSERT INTO `addneworder` (`client_name`,`cnic`,`phone`,`stitching_type`,`delivery_date`,`delivery_type`,`product`,`rate`,`quantity`,`sub_total`,`paid_amount`,`due_amount`,`progress_suit`) VALUES ('$client_name','$cnic','$phone','$stitching_type','$delivery_date','$delivery_type','$product','$rate','$quantity','$sub_total','$paid_amount','$due_amount','$progress_suit')";
-                $result = mysqli_query($conn, $sql);
-                var_dump($result);
+    //             $sql = "INSERT INTO `addneworder` (`client_name`,`cnic`,`phone`,`stitching_type`,`delivery_date`,`delivery_type`,`product`,`rate`,`quantity`,`sub_total`,`paid_amount`,`due_amount`,`progress_suit`) VALUES ('$client_name','$cnic','$phone','$stitching_type','$delivery_date','$delivery_type','$product','$rate','$quantity','$sub_total','$paid_amount','$due_amount','$progress_suit')";
+    //             $result = mysqli_query($conn, $sql);
+    //             var_dump($result);
 
-                if($result){
-                    $showAlert = "Client entered successfully";
-                }else{
-                    $showError =  "Record not Entered <br> " . mysqli_error($conn);
-                }            
+    //             if($result){
+    //                 $showAlert = "Client entered successfully";
+    //             }else{
+    //                 $showError =  "Record not Entered " . mysqli_error($conn) . "<br>Query: " . $sql;
+    //                 echo $showError;
+    //                 // $showError =  "Record not Entered <br> " . mysqli_error($conn);
+    //             }            
+    //     }
+    //     // else{
+    //     //     $showError = "somting went wrong".mysqli_error($conn);
+    //     // }
+    // }
+
+if (isset($_POST['add_new_order'])) {
+    $requiredFields = ['client_name', 'cnic', 'phone', 'stitching_type', 'delivery_date', 'delivery_type', 'product', 'rate', 'quantity', 'sub_total', 'progress_suit'];
+    $isValid = true;
+
+    foreach ($requiredFields as $field) {
+        if (!isset($_POST[$field]) || trim($_POST[$field]) === '') {
+            $isValid = false;
+            break;
         }
-        // else{
-        //     $showError = "somting went wrong".mysqli_error($conn);
-        // }
     }
+
+    // Allow `paid_amount` and `due_amount` to be optional or `0`
+    $paid_amount = isset($_POST['paid_amount']) ? trim($_POST['paid_amount']) : '0';
+    $due_amount = isset($_POST['due_amount']) ? trim($_POST['due_amount']) : '0';
+
+    if ($isValid) {
+        // Proceed with inserting data
+        $client_name = $_POST['client_name'];
+        $cnic = $_POST['cnic'];
+        $phone = $_POST['phone'];
+        $stitching_type = $_POST['stitching_type'];
+        $delivery_date = $_POST['delivery_date'];
+        $delivery_type = $_POST['delivery_type'];
+        $product = $_POST['product'];
+        $rate = $_POST['rate'];
+        $quantity = $_POST['quantity'];
+        $sub_total = $_POST['sub_total'];
+        $progress_suit = $_POST['progress_suit'];
+
+        $sql = "INSERT INTO `addneworder` (`client_name`, `cnic`, `phone`, `stitching_type`, `delivery_date`, `delivery_type`, `product`, `rate`, `quantity`, `sub_total`, `paid_amount`, `due_amount`, `progress_suit`) 
+                VALUES ('$client_name', '$cnic', '$phone', '$stitching_type', '$delivery_date', '$delivery_type', '$product', '$rate', '$quantity', '$sub_total', '$paid_amount', '$due_amount', '$progress_suit')";
+
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $showAlert = "Client entered successfully";
+        } else {
+            $showError = "Record not Entered <br> " . mysqli_error($conn);
+        }
+    } else {
+        $showError = "Please fill in all required fields.";
+    }
+}
 ?>
 
 
@@ -213,6 +259,8 @@
 </div>
 
 <script>
+    
+
     document.getElementById("order_form").onsubmit = function(event) {
         let isValid = true;
 
@@ -221,16 +269,26 @@
         var phoneNumber = document.getElementById("phone").value;
         var deliveryDate = document.getElementById("delivery_date").value;
         var quantity = document.getElementById("quantity").value;
-        var advance = document.getElementById("paid_amount").value;
+
+        // console.log(quantity);
+        // var advance = document.getElementById("paid_amount").value;
 
         isValid = validate_client_name(client_name) && isValid;
         isValid = validateCNIC(cnic) && isValid;
         isValid = validatePhoneNumber(phoneNumber) && isValid;
         isValid = validateDeliveryDate(deliveryDate) && isValid;
         isValid = validatequantity(quantity) && isValid;
-        isValid = validatePaid_amount(advance) && isValid;
+
+        // Validate Advance field
+        if (!calculatePaidAmount()) {
+            console.log("Validation failed");
+            isValid = false;
+            // event.preventDefault(); // Stop form submission if validation fails
+
+        }
 
         if (!isValid) {
+            // console.log("Validation failed");
             event.preventDefault(); // Stop form submission if validation fails
         }
     };
@@ -304,31 +362,175 @@
         return true;
     }
 
-    function validatequantity(quantity) {
-        const quantityRegex = /^\d+$/; 
-        const quantityErr = document.getElementById("quantityErr");
 
-        if (quantityRegex.test(quantity)) {
-            quantityErr.innerHTML = "";
-            return true;
-        } else {
+    function validatequantity(quantity) {
+        const quantityErr = document.getElementById("quantityErr");
+        quantityErr.innerHTML = ""; // Reset error first
+
+        // Trim and check if the input is empty
+        if (!quantity || quantity.trim() === "") {
+            quantityErr.innerHTML = "Please enter a valid quantity";
+            return false;
+        }
+
+        // Parse the quantity as a float
+        const parsedQuantity = parseFloat(quantity);
+        // console.log("parsedQuantity");
+        // Check if the parsed value is a valid number
+        if (isNaN(parsedQuantity)) {
             quantityErr.innerHTML = "Only numbers are allowed";
             return false;
         }
-    }
 
-    function validatePaid_amount(advance) {
-        const paid_amountRegex = /^\d+$/; 
-        const paid_amountErr = document.getElementById("paid_amountErr");
-
-        if (paid_amountRegex.test(advance)) {
-            paid_amountErr.innerHTML = "";
-            return true;
-        } else {
-            paid_amountErr.innerHTML = "Only numbers are allowed";
+        // Check if the quantity is greater than 0
+        if (parsedQuantity <= 0) {
+            quantityErr.innerHTML = "Quantity must be greater than 0";
             return false;
         }
+
+        // If all checks pass, return true
+        return true;
     }
+
+    // function validatePaid_amount(paidAmount){
+    //     const paid_amountErr = document.getElementById("paid_amountErr");
+    //     var paidAmount = document.getElementById("paid_amount").value; // Get advance amount, default to 0 if empty
+    //     let subtotal = parseFloat($("#sub_total").val()) || 0; // Get subtotal, default to 0 if empty
+
+    //     console.log("subtotal for adv:", subtotal );
+    //     console.log("Advancess:", paidAmount );
+    //     paid_amountErr.innerHTML = ""; // Reset error first
+
+    //     // Trim and check if the input is empty
+    //     // if (!paidAmount || paidAmount.trim() === "") {
+    //     //     paid_amountErr.innerHTML = "Please enter a atleast 0";
+    //     //     return false;
+    //     // }
+    //     // If the field is not empty, validate the input
+    //     if (paidAmount !== '') {
+    //             if (isNaN(paidAmount)) {
+    //                 paid_amountErr.text("Please enter a valid number");
+    //                 return false;
+    //             } else if (paidAmount < 0) {
+    //                 paid_amountErr.text("Advance cannot be negative");
+    //                 return false;
+    //             } else if (paidAmount > subtotal) {
+    //                 paid_amountErr.text("Advance cannot exceed subtotal");
+    //                 return false;
+    //             }
+    //     }
+    // }
+    
+
+    // document.getElementById("order_form").onsubmit = function(event) {
+    //     let isValid = true;
+
+    //     if (!isValid) {
+    //         console.log("Advance Validation failed");
+    //         event.preventDefault(); // Stop form submission if validation fails
+    //     }
+    // };
+
+        // function calculatePaidAmount() {
+        //     let subtotal = parseFloat($("#sub_total").val()) || 0; // Get subtotal, default to 0 if empty
+        //     console.log("Sub total:", subtotal);
+        //     let paidAmount = parseFloat($("#paid_amount").val()) || 0; // Get advance amount, default to 0 if empty
+        //     console.log("Parsed Advance:", paidAmount );
+        //     // let paidAmountInput = $("#paid_amount").val().trim(); // Get raw input value
+        //     console.log("Raw Advance val:", paidAmount );
+            
+        //     let paidAmountErr = $('#paid_amountErr'); // Error span for advance field
+
+        //     // Reset errors
+        //     paidAmountErr.text('');
+
+        //     // If the field is not empty, validate the input
+        //     if (paidAmount !== '') {
+        //         if (isNaN(paidAmount)) {
+        //             paidAmountErr.text("Please enter a valid number");
+        //             return false;
+        //         } else if (paidAmount < 0) {
+        //             paidAmountErr.text("Advance cannot be negative");
+        //             return false;
+        //         } else if (paidAmount > subtotal) {
+        //             paidAmountErr.text("Advance cannot exceed subtotal");
+        //             return false;
+        //         }
+        //         // return true
+        //     }
+
+        //     // Calculate due amount
+        //     let dueAmount = subtotal - paidAmount;
+        //     console.log("Due Amount", dueAmount);
+
+        //     $("#due_amount").val(dueAmount.toFixed(2));
+        //     return true;
+        // }
+
+        function calculatePaidAmount() {
+            let subtotal = parseFloat($("#sub_total").val()) || 0; // Get subtotal, default to 0 if empty
+            let paidAmount = parseFloat($("#paid_amount").val()) || 0; // Get advance amount, default to 0 if empty
+            let paidAmountInput = $("#paid_amount").val().trim(); // Get raw input value
+            let paidAmountErr = $('#paid_amountErr'); // Error span for advance field
+
+            // Reset errors
+            paidAmountErr.text('');
+
+            // Validate the Advance field
+            // If the field is not empty, validate the input
+            if (paidAmountInput !== '') {
+                if (isNaN(paidAmount)) {
+                    paidAmountErr.text("Please enter a valid number");
+                    return false;
+                }
+
+                if (paidAmount < 0) {
+                    paidAmountErr.text("Advance cannot be negative");
+                    return false;
+                }
+
+                if (paidAmount > subtotal) {
+                    paidAmountErr.text("Advance cannot exceed subtotal");
+                    return false;
+                }
+            }
+
+            // Calculate due amount
+            let dueAmount = subtotal - paidAmount;
+            console.log("Due Amount:", dueAmount);
+
+            $("#due_amount").val(dueAmount.toFixed(2));
+            return true;
+        }
+
+        // Validate Advance field
+        // if (!calculatePaidAmount()) {
+        //     console.log("Validation failed");
+        //     isValid = false;
+        //     // event.preventDefault(); // Stop form submission if validation fails
+
+        // }
+
+        
+        
+        // Attach the function to the input event of the Advance field
+        $("#paid_amount").on("input", function () {
+            calculatePaidAmount();
+        });
+   
+
+    // function validatePaid_amount(advance) {
+    //     const paid_amountRegex = /^\d+$/; 
+    //     const paid_amountErr = document.getElementById("paid_amountErr");
+
+    //     if (paid_amountRegex.test(advance)) {
+    //         paid_amountErr.innerHTML = "";
+    //         return true;
+    //     } else {
+    //         paid_amountErr.innerHTML = "Only numbers are allowed";
+    //         return false;
+    //     }
+    // }
 
     
 
@@ -378,31 +580,59 @@
 
 $(document).ready(function () {
     // Set default value to 0 if Advance Amount field is empty
-    let paidAmountInput = $("#paid_amount");
-    if ($.trim(paidAmountInput.val()) === "" || paidAmountInput.val() === "0") {
-        paidAmountInput.val("00");
-    }
+    // let paidAmountInput = $("#paid_amount");
+    // if ($.trim(paidAmountInput.val()) === "" || paidAmountInput.val() === "0") {
+    //     paidAmountInput.val("00");
+    // }
+    // function calculatePaidAmount() {
+    //     let paidAmountInput = $("#paid_amount");
+    //     if ($.trim(paidAmountInput.val()) === "" || paidAmountInput.val() === "0") {
+    //         paidAmountInput.val("00");
+    //     }
+    
+    //     // Reset errors
+    //     $('#paid_amountErr').text('');
+    //     // ADVANCE AMOUNT VALIDATION (OPTIONAL FIELD)
+    //     if (paidAmountInput !== '') {
+    //         const advance = parseFloat(paidAmountInput);
+
+    //         if (isNaN(advance)) {
+    //             $('#paid_amountErr').text("Please enter a valid number");
+    //             return false;
+    //         } else if (advance < 0) {
+    //             $('#paid_amountErr').text("Advance cannot be negative");
+    //             return false;
+    //         } else if (advance > dueAmount) {
+    //             $('#paid_amountErr').text("Advance cannot exceed due amount");
+    //             return false;
+    //         } else {
+    //             grandTotal = dueAmount - advance;
+    //             let dueAmount = subtotal - paidAmount; // Subtract advance from subtotal
+
+    //         }
+    //     }
+    // }    
 
     $("#category_form").submit(function (event) {
         let isValid = true;
 
         let quantity = $("#quantity").val().trim();
-        let paid_amount = $("#paid_amount").val().trim();
+        // let paid_amount = $("#paid_amount").val().trim();
 
          // Convert empty paid amount to 0 before validation
-         if (paid_amount === "") {
-            paidAmountInput.val("00");
-            paid_amount = "00"; 
-        }
+        //  if (paid_amount === "") {
+        //     paidAmountInput.val("0");
+        //     paid_amount = "0"; 
+        // }
 
         isValid = validate_quantity(quantity) && isValid;
-        isValid = validate_paid_amount(paid_amount) && isValid;
+        // isValid = validate_paid_amount(paid_amount) && isValid;
 
         if (!isValid) {
             event.preventDefault(); // Stop form submission if validation fails
         }
     });
-
+    // validate quantity
     function validate_quantity(quantity) {
         let quantityErr = $("#quantityErr");
         if (quantity === "") {
@@ -418,21 +648,23 @@ $(document).ready(function () {
         return true;
     }
 
-    function validate_paid_amount(paid_amount) {
-        let paidAmountErr = $("#paid_amountErr");
-        // if (paid_amount === "") {
-        //     consol.log(paid_amount);
+    // Validate paid amount or Advacne amount,,,
+    // this validation already done in above portion of code in JS , & this is jquery validation
+    // function validate_paid_amount(paid_amount) {
+    //     let paidAmountErr = $("#paid_amountErr");
+    //     // if (paid_amount === "") {
+    //     //     consol.log(paid_amount);
 
-        //     paidAmountErr.html("Please enter a valid Advance Amount");
-        //     return false;
+    //     //     paidAmountErr.html("Please enter a valid Advance Amount");
+    //     //     return false;
         
-        if (!/^[0-9]+$/.test(paid_amount)) {
-            paidAmountErr.html("Only numbers are allowed");
-            return false;
-        }
-        paidAmountErr.html("");
-        return true;
-    }
+    //     if (!/^[0-9]+$/.test(paid_amount)) {
+    //         paidAmountErr.html("Only numbers are allowed");
+    //         return false;
+    //     }
+    //     paidAmountErr.html("");
+    //     return true;
+    // }
 });
 
 
@@ -451,21 +683,91 @@ $(document).ready(function() {
 
     // Function to calculate due amount
     $("#due_amount").val("0");
-    function calculateDueAmount() {
-        let subtotal = parseFloat($("#sub_total").val()) || 0;  // Get subtotal, default to 0 if empty
-        let paidAmount = parseFloat($("#paid_amount").val()) || 0; // Get advance amount, default to 0 if empty
-        let dueAmount = subtotal - paidAmount; // Subtract advance from subtotal
-        $("#due_amount").val(dueAmount.toFixed(2)); // Display result in due_amount field
-    }
+    // function calculateDueAmount() {
+    //     let subtotal = parseFloat($("#sub_total").val()) || 0;  // Get subtotal, default to 0 if empty
+    //     let paidAmount = parseFloat($("#paid_amount").val()) || 0; // Get advance amount, default to 0 if empty
+    //     let dueAmount = subtotal - paidAmount; // Subtract advance from subtotal
+    //     $("#due_amount").val(dueAmount.toFixed(2)); // Display result in due_amount field
+    // }
+
+    
+
+    // Advance amount validation (Optional field)
+    // function calculatePaidAmount() {
+    //     let subtotal = parseFloat($("#sub_total").val()) || 0;  // Get subtotal, default to 0 if empty
+    //     let paidAmount = parseFloat($("#paid_amount").val()) || 0; // Get advance amount, default to 0 if empty
+    //     let dueAmount = subtotal - paidAmount; // Subtract advance from subtotal
+
+    //     // let paidAmountInput = $("#paid_amount");
+    //     // if ($.trim(paidAmountInput.val()) === "" || paidAmountInput.val() === "0") {
+    //     //     paidAmountInput.val("00");
+    //     // }
+    
+    //     // Reset errors
+    //     $('#paid_amountErr').text('');
+    //     // ADVANCE AMOUNT VALIDATION (OPTIONAL FIELD)
+    //     if (paidAmount !== '') {
+    //         const advance = parseFloat(paidAmount);
+
+    //         if (isNaN(advance)) {
+    //             $('#paid_amountErr').text("Please enter a valid number");
+    //             return false;
+    //         } else if (advance < 0) {
+    //             $('#paid_amountErr').text("Advance cannot be negative");
+    //             return false;
+    //         } else if (advance > dueAmount) {
+    //             $('#paid_amountErr').text("Advance cannot exceed due amount");
+    //             return false;
+    //         } else {
+    //             // grandTotal = dueAmount - advance;
+    //             dueAmount = subtotal - paidAmount; // Subtract advance from subtotal
+    //         }
+    //     }
+    //     $("#due_amount").val(dueAmount.toFixed(2)); // Display result in due_amount field
+    // }  
+
+    // function calculatePaidAmount() {
+    //     let subtotal = parseFloat($("#sub_total").val()) || 0;
+    //     let paidAmount = parseFloat($("#paid_amount").val()) || 0; // This will be 0 if empty or invalid
+    //     console.log(paidAmount);
+    //     // Reset errors
+    //     $('#paid_amountErr').text('');
+        
+    //     // Validate only if there's a value entered (not empty string)
+    //     if ($("#paid_amount").val().trim() !== '') {
+    //         if (isNaN(paidAmount)) {
+    //             $('#paid_amountErr').text("Please enter a valid number");
+    //             return false;
+    //         } else if (paidAmount < 0) {
+    //             $('#paid_amountErr').text("Advance cannot be negative");
+    //             return false;
+    //         } else if (paidAmount > subtotal) {
+    //             $('#paid_amountErr').text("Advance cannot exceed subtotal");
+    //             return false;
+    //         }
+    //     }
+        
+    //     // Calculate due amount
+    //     let dueAmount = subtotal - paidAmount;
+    //     $("#due_amount").val(dueAmount.toFixed(2));
+    //     return true;
+    // }
+
+    // $("#paid_amount").on("input", function() {
+    //     calculatePaidAmount();
+    // });
 
     // Event listeners on rate, quantity, and advance amount fields
     $("#rate, #quantity").on("input", function () {
         calculateSubtotal(); // Update subtotal and due amount dynamically
     });
 
-    $("#paid_amount").on("input", function () {
-        calculateDueAmount(); // Update due amount when advance is entered
-    });
+    // $("#paid_amount").on("input", function () {
+    //     calculateDueAmount(); // Update due amount when advance is entered
+    // });
+    // $("#paid_amount").on("input", function () {
+    //     calculatePaidAmount(); // Update due amount when advance is entered
+    // });
    
 
      // Fetch all products on page load

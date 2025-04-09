@@ -81,7 +81,7 @@ $(document).ready(function() {
         <div class="row">
             <!-- Total Revenue of Today -->
             <div class="col-lg-3 col-sm-6 col-12">
-                <a href="http://localhost/sm-ims/pending_packing.php">
+                <!-- <a href="http://localhost/sm-ims/pending_packing.php"> -->
                     <div class="dash-widget" style="padding: 20px 15px 20px;">
                         <div class="dash-widgetimg">
                             <span><img src="assets/img/icons/dash1.svg" alt="img"></span>
@@ -96,7 +96,7 @@ $(document).ready(function() {
             </div>
             <!-- Total revenue of Current Month-->
             <div class="col-lg-3 col-sm-6 col-12">
-                <a href="http://localhost/sm-ims/monthly_packing.php">
+                <!-- <a href="http://localhost/sm-ims/monthly_packing.php"> -->
                     <div class="dash-widget dash1">
                         <div class="dash-widgetimg">
                             <span><img src="assets/img/icons/dash2.svg" alt="img"></span>
@@ -111,7 +111,7 @@ $(document).ready(function() {
             
             <!-- Total Revenue of CUrrent year -->
             <div class="col-lg-3 col-sm-6 col-12">
-                <a href="http://localhost/sm-ims/pending_packing.php">
+                <!-- <a href="http://localhost/sm-ims/pending_packing.php"> -->
                     <div class="dash-widget" style="padding: 20px 15px 20px;">
                         <div class="dash-widgetimg">
                             <span><img src="assets/img/icons/dash1.svg" alt="img"></span>
@@ -264,7 +264,7 @@ $(document).ready(function() {
         </div>
         <!-- chart row section -->
 
-        <!-- last row datatable section -->
+        <!-- last row to show record Ready for Delivery datatable section -->
         <div class="card mb-0">
             <div class="card-body">
                 <h4 class="card-title h2_heading text-white p-2">Suits Ready for Delivery</h4>
@@ -305,7 +305,7 @@ $(document).ready(function() {
                                     <td class='td_style'>".$delivery_date."</td>
                                     <td class='td_style'>".($result['progress_suit'])."</td>                                                
                                     <td class='td_style'>
-                                        <a class='me-3 edit_btn' href='/SM-IMS/edit_invoice.php?id=$result[id]'>
+                                        <a class='me-3 edit_btn' href='/SM-IMS/testTMS/edit_invoice.php?id=$result[id]'>
                                             <img src='assets/img/icons/dash2.svg' alt='img'>
                                         </a>
                                         <button type='button' class='btn btn-danger delete_btn' style='background:transparent; border:none;' value='".$result['id']."'>
@@ -323,66 +323,6 @@ $(document).ready(function() {
                 </div>
             </div>
         </div>
-
-
-        <!-- <div class="card mb-0">
-            <div class="card-body">
-                <h4 class="card-title h2_heading text-white p-2">Suits Ready for Delivery</h4>
-                <div class="table-responsive dataview">
-                    <table id="suitsReadyTable" class="table display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Order Date</th>
-                                <th>Suit No.</th>
-                                <th>Name</th>
-                                <th>Whatsapp</th>
-                                <th>Delivery Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php                               
-                    $query = "SELECT * FROM addneworder WHERE progress_suit IN ('ready_for_delivery') ORDER BY date DESC";                              
-                    
-                    $db_table_data = mysqli_query($conn, $query);
-                    $total_rows = mysqli_num_rows($db_table_data);
-
-                    if($total_rows > 0) {
-                        $number = 1;
-                        while($result = mysqli_fetch_assoc($db_table_data)) {
-                            $order_date = date("d-m-Y", strtotime($result['date']));
-                            $delivery_date = date("d-m-Y", strtotime($result['delivery_date']));
-                            ?>
-                            <tr>
-                                <td class='td_style'><?= $number ?></td>
-                                <td class='td_style'><?= $order_date ?></td>
-                                <td class='td_style'><?= htmlspecialchars($result['id']) ?></td>
-                                <td class='td_style'><?= htmlspecialchars($result['client_name']) ?></td>
-                                <td class='td_style'><?= htmlspecialchars($result['phone']) ?></td>
-                                <td class='td_style'><?= $delivery_date ?></td>
-                                <td class='td_style'><?= htmlspecialchars($result['progress_suit']) ?></td>
-                                <td class='td_style'>
-                                    <a class='me-3 edit_btn' href='/SM-IMS/edit_invoice.php?id=<?= $result['id'] ?>'>
-                                        <img src='assets/img/icons/dash2.svg' alt='Edit'>
-                                    </a>
-                                    <button type='button' class='btn btn-danger delete_btn'
-                                        style='background:transparent; border:none;' value='<?= $result['id'] ?>'>
-                                        <img src='assets/img/icons/delete.svg' alt='Delete'>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php
-                            $number++;
-                        }
-                    }
-                    ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>
 
@@ -426,16 +366,16 @@ $(document).on('keyup', '#gatePass_vendor', function(e) {
 });
 
 // Get vendor name for gatepass (pending)
-$(document).on("click", "a.list-group-item", function() {
-    var name = $(this).html();
-    // var id = $(this).data('id');
-    // console.log(id);
+// $(document).on("click", "a.list-group-item", function() {
+//     var name = $(this).html();
+//     // var id = $(this).data('id');
+//     // console.log(id);
 
-    $("#gatePass_vendor").val(name);
-    // $("#emp_id").val(id);
-    $("#gatePass_list").html("");
-    $("#error_message").html("").slideUp();
-});
+//     $("#gatePass_vendor").val(name);
+//     // $("#emp_id").val(id);
+//     $("#gatePass_list").html("");
+//     $("#error_message").html("").slideUp();
+// });
 
 
 

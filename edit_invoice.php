@@ -48,7 +48,7 @@
                 $_SESSION['success'] = "Order #$order_id updated successfully!";
                 // $showAlert = "Order # $order_id is updated Successfully ";               
                 ?>
-                    <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/manage_order.php" />
+                    <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/testTMS/manage_order.php" />
                     <!-- this meta tag will refresh page after 0 sec, CONTENT declare time of refresh,  -->
                 <?php
             }
@@ -56,14 +56,14 @@
         else {
             echo "<script>alert('Something went wrong, Product Status is not updated')</script>" .mysqli_error($conn);
             ?>
-                <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/manage_order.php" />
+                <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/testTMS/manage_order.php" />
             <?php 
         }
     } 
     // else {
     //         echo "<script>alert('Something went wrong, Product is not updated')</script>" .mysqli_error($conn);
     
-    //         <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/manage_order.php" /> -->
+    //         <meta http-equiv="refresh" content="0; url=http://localhost/SM-IMS/testTMS/manage_order.php" /> -->
           
     // }
     
