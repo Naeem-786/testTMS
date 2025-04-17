@@ -28,15 +28,15 @@ $showError=false;
     // $conn->close(); // Close the database connection
 
     // php code for suit no searching
-    if(isset($_POST['find_suit'])){
-        if((isset($_POST['suit_no']) )
-        && trim($_POST['suit_no']) !=='' ){
-            $suit_no = $_POST['suit_no'];
+    // if(isset($_POST['id'])){
+    //     if((isset($_POST['suit_no']) )
+    //     && trim($_POST['suit_no']) !=='' ){
+    //         $suit_no = $_POST['suit_no'];
             
-            $find_suit = mysqli_query($conn, "SELECT * FROM addneworder WHERE suit_no ='$suit_no' LIMIT 1 ")
-                or die(mysqli_error($conn));
-        }
-    } 
+    //         $find_suit = mysqli_query($conn, "SELECT * FROM addneworder WHERE id ='$suit_no' LIMIT 1 ")
+    //             or die(mysqli_error($conn));
+    //     }
+    // } 
     
    
 
@@ -90,12 +90,12 @@ if(isset($_POST['final_bill'])){
                             <h6>Finalize Client Payment</h6>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <!-- <div class="form-group" style="margin: 0;"> -->
+                    <!-- <div class="col-lg-6">
+                        <div class="form-group" style="margin: 0;">
 
                         <form method="POST">
                             <div class="page-title d-flex" style="justify-content: end; align-items: center;}">
-                                <!-- style="margin-top: 0.7rem; padding: 8px 10px;" -->
+                                style="margin-top: 0.7rem; padding: 8px 10px;"
                                 <h4>Suit No: </h4>
                                 <div class="form-group m-0">
                                     <input type="text" id="suit_no" name="suit_no">
@@ -107,7 +107,7 @@ if(isset($_POST['final_bill'])){
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -180,6 +180,7 @@ if(isset($_POST['final_bill'])){
                                     readonly>
                             </div>
                         </div>
+                        <!-- Stitching type -->
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group mx-2">
                                 <label>Stitching Type</label>
@@ -194,6 +195,7 @@ if(isset($_POST['final_bill'])){
                                 </select>
                             </div>
                         </div>
+                        <!-- delivery date -->
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group mx-2">
                                 <label>Delivery Date</label>
@@ -201,6 +203,7 @@ if(isset($_POST['final_bill'])){
                                     value="<?php echo $result['delivery_date'] ; ?>" readonly>
                             </div>
                         </div>
+                        <!-- delivery type -->
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group mx-2">
                                 <label>Delivery Type</label>
@@ -215,10 +218,13 @@ if(isset($_POST['final_bill'])){
                                 </select>
                             </div>
                         </div>
+                        <!-- produtct -->
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group mx-2">
                                 <label>Product</label>
-                                <select id="product" name="product" readonly>
+                                <input type="text" id="product" name="product" class="form-control" 
+                                    value="<?php echo $result['product']; ?>" >
+                                <!-- <select id="product" name="product" readonly>
                                     <option value="full_suit" selected
                                         <?php echo ($product == 'full_suit') ? 'selected' : ''; ?>>Full Suit
                                     </option>
@@ -229,7 +235,7 @@ if(isset($_POST['final_bill'])){
                                         <?php echo ($product == 'only_shalwar') ? 'selected' : ''; ?>>Only Shalwar
                                     </option>
 
-                                </select>
+                                </select> -->
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-6 col-12">
@@ -373,62 +379,13 @@ function validate_enter_amount(enter_amount) {
 }
 
 
-
-// Bill payment delivery status 
-document.addEventListener("DOMContentLoaded", function() {
-    var finalBillButton = document.getElementById("final_bill");
-    var progressSuit = document.getElementById("progress_suit");
-    var errorMessage = document.getElementById("error_message");
-
-    var cash_amount = document.getElementById("enter_amount");
-    var grand_total = document.getElementById("grand_total");
-    console.log(cash_amount);
-
-    // Check if the status is already "delivered" when fetching the record
-    if (progressSuit.value === "delivered") {
-        finalBillButton.disabled = true; // Disable the Pay Bill button
-    }
-
-    finalBillButton.addEventListener("click", function(event) {
-        var status = progressSuit.value;
-        var cash_amount_payment_status = parseFloat(cash_amount.value); // assuming this is an input field
-        var grandTotal = parseFloat(grand_total.value); // you need to define this
-        
-        let error = "";
-        
-        if (status !== "delivered") {
-            error = "❌ Error: Status must be 'Delivered' to proceed!";
-        } 
-        else if (cash_amount_payment_status < grandTotal) {
-            error = "❌ Error: Cash amount must be greater than or equal to Grand Total to pay Bill!";
-        }
-        
-        if (error) {
-            event.preventDefault();
-            errorMessage.innerHTML = error;
-            $(errorMessage).slideDown();
-        } else {
-            errorMessage.innerHTML = "";
-            $(errorMessage).slideUp();
-        }
-    });
-
-    // readonly or disabled or prevent to change the dropdown value against these fields
-    document.querySelectorAll("#stitching_type, #delivery_type, #product").forEach(function(element) {
-        element.addEventListener("mousedown", function(event) {
-            event.preventDefault(); // Prevent selection change
-        });
-    });
-
-});
-
 $(document).ready(function() {
-    // Initialize with due amount as grand total
+    // Initialize calculations
     const dueAmount = parseFloat($('#due_amount').val()) || 0;
     $('#grand_total').val(dueAmount.toFixed(2));
     $('#balance').val('0.00');
 
-    // Calculate both grand total and balance
+    // Real-time calculation function
     function calculateAll() {
         const dueAmount = parseFloat($('#due_amount').val()) || 0;
         const discountInput = $('#discount').val().trim();
@@ -438,7 +395,7 @@ $(document).ready(function() {
         $('#discountErr').text('');
         $('#cashErr').text('');
 
-        // 1. Handle discount (optional field)
+        // 1. Calculate grand total with discount
         let grandTotal = dueAmount;
         if (discountInput !== '') {
             const discount = parseFloat(discountInput);
@@ -458,7 +415,7 @@ $(document).ready(function() {
         }
         $('#grand_total').val(grandTotal.toFixed(2));
 
-        // 2. Handle payment (required if grandTotal > 0)
+        // 2. Validate payment
         let paymentValid = true;
         if (cashInput !== '') {
             const cash = parseFloat(cashInput);
@@ -476,39 +433,166 @@ $(document).ready(function() {
             
             const balance = cash - grandTotal;
             $('#balance').val(balance.toFixed(2));
-        } else {
-            // If no payment entered but amount is due
-            if (grandTotal > 0) {
-                $('#cashErr').text("❌ Payment required");
-                paymentValid = false;
-            }
+        } else if (grandTotal > 0) {
+            $('#cashErr').text("❌ Payment required");
+            paymentValid = false;
             $('#balance').val('0.00');
         }
-        // } else {
-        //     // If no payment entered but amount is due
-        //     if (grandTotal > 0) {
-        //         $('#cashErr').text("❌ Payment required");
-        //         paymentValid = false;
-        //     }
-        //     $('#balance').val('0.00');
-        // }
 
         return paymentValid;
     }
 
     // Real-time calculation
     $('#discount, #enter_amount').on('input', calculateAll);
+     
 
-    // Form submission
-    $('#billForm').on('submit', function(e) {
-        if (!calculateAll()) {
-            e.preventDefault();
+    $(document).ready(function() {
+        // Initialize with due amount as grand total
+        const dueAmount = parseFloat($('#due_amount').val()) || 0;
+        $('#grand_total').val(dueAmount.toFixed(2));
+        $('#balance').val('0.00');
+
+        // Check if status is "delivered" on page load
+        if ($('#progress_suit').val() === "delivered") {
+            $('#final_bill').prop('disabled', true);
         }
+
+        // Calculate both grand total and balance
+        function calculateAll() {
+            const dueAmount = parseFloat($('#due_amount').val()) || 0;
+            const discountInput = $('#discount').val().trim();
+            const cashInput = $('#enter_amount').val().trim();
+            
+            // Reset errors
+            $('#discountErr').text('');
+            $('#cashErr').text('');
+
+            // 1. Handle discount (optional field)
+            let grandTotal = dueAmount;
+            if (discountInput !== '') {
+                const discount = parseFloat(discountInput);
+
+                if (isNaN(discount)) {
+                    $('#discountErr').text("Please enter a valid number");
+                    return false;
+                } else if (discount < 0) {
+                    $('#discountErr').text("Discount cannot be negative");
+                    return false;
+                } else if (discount > dueAmount) {
+                    $('#discountErr').text("Discount cannot exceed due amount");
+                    return false;
+                } else {
+                    grandTotal = dueAmount - discount;
+                }
+            }
+            $('#grand_total').val(grandTotal.toFixed(2));
+
+            // 2. Handle payment (required if grandTotal > 0)
+            let paymentValid = true;
+            if (cashInput !== '') {
+                const cash = parseFloat(cashInput);
+                
+                if (isNaN(cash)) {
+                    $('#cashErr').text("Please enter a valid number");
+                    paymentValid = false;
+                } else if (cash < 0) {
+                    $('#cashErr').text("Payment cannot be negative");
+                    paymentValid = false;
+                } else if (cash < grandTotal) {
+                    $('#cashErr').text("❌ Payment insufficient (must cover grand total)");
+                    paymentValid = false;
+                }
+                
+                const balance = cash - grandTotal;
+                $('#balance').val(balance.toFixed(2));
+            } else if (grandTotal > 0) {
+                $('#cashErr').text("❌ Payment required");
+                paymentValid = false;
+                $('#balance').val('0.00');
+            }
+
+            return paymentValid;
+        }
+
+        // Real-time calculation
+        $('#discount, #enter_amount').on('input', calculateAll);
+
+        // Final Bill button handler
+        $('#final_bill').click(function(e) {
+            e.preventDefault();
+            
+            // 1. Validate form calculations
+            if (!calculateAll()) {
+                return false;
+            }
+
+            // 2. Validate delivery status and payment amount
+            var status = $('#progress_suit').val();
+            var cashAmount = parseFloat($('#enter_amount').val()) || 0;
+            var grandTotal = parseFloat($('#grand_total').val()) || 0;
+            
+            if (status !== "delivered") {
+                $('#error_message').html("❌ Error: Status must be 'Delivered' to proceed!").slideDown();
+                return false;
+            }
+            
+            if (cashAmount < grandTotal) {
+                $('#error_message').html("❌ Error: Payment must cover the grand total!").slideDown();
+                return false;
+            }
+
+            // 3. Process payment and generate PDF
+            $('#final_bill').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Processing...');
+            
+            var formData = new FormData($('#category_form')[0]);
+            formData.append('action', 'process_payment_and_invoice');
+
+            $.ajax({
+                type: 'POST',
+                url: 'core.php',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Download PDF
+                        if (response.pdfUrl) {
+                            var link = document.createElement('a');
+                            link.href = response.pdfUrl;
+                            link.download = response.pdfName || 'invoice.pdf';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                        
+                        // Show success and redirect
+                        $('#success_message').html("Payment processed and invoice generated!").slideDown();
+                        setTimeout(function() {
+                            window.location.href = 'ready_for_delivery.php';
+                        }, 2000);
+                    } else {
+                        $('#error_message').html(response.message || "Payment failed").slideDown();
+                        $('#final_bill').prop('disabled', false).html('Pay Bill');
+                    }
+                },
+                error: function(xhr) {
+                    $('#error_message').html("AJAX Error: " + xhr.statusText).slideDown();
+                    $('#final_bill').prop('disabled', false).html('Pay Bill');
+                }
+            });
+        });
+
+        // Prevent modification of readonly dropdowns
+        $('#stitching_type, #delivery_type, #product').on('mousedown', function(e) {
+            if ($(this).prop('readonly')) {
+                e.preventDefault();
+            }
+        });
     });
 });
 
 $(document).ready(function() {
-    
     // delete new category code through sweetalert ajax
     $('.table-responsive').on('click', '.delete_btn', function(e) {
         e.preventDefault();
@@ -558,8 +642,6 @@ $(document).ready(function() {
     $("#new_category_code").load(location.href + " #new_category_code", function() {
         $('#myTable').DataTable();
     });
-
-
 
 });
 </script>

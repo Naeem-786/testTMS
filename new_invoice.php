@@ -69,22 +69,37 @@
                             <tbody>
                                 <?php
                                         $suit_no = '';
+                                        $client_name = '';
+
                                         if(isset($_POST['find_suit'])) {
-                                            if(isset($_POST['suit_no']) && trim($_POST['suit_no']) !== '') {
-                                                $suit_no = ($_POST['suit_no']);
-                                                // var_dump($suit_no);
-                                                // Security: Escape the input to prevent SQL injection
-                                                // $escaped_suit_no = mysqli_real_escape_string($conn, $suit_no);
+                                            // Get and sanitize inputs
+                                            $suit_no = isset($_POST['suit_no']) ? mysqli_real_escape_string($conn, trim($_POST['suit_no'])) : '';
+                                            $client_name = isset($_POST['client_name']) ? mysqli_real_escape_string($conn, trim($_POST['client_name'])) : '';
+                                            
+                                            // Proceed if either field has value
+                                            // if($suit_no !== '' || $client_name !== '') {
+                                                // $sql = "SELECT * FROM addneworder WHERE `id` = '$suit_no' LIMIT 1 OR `client_name` LIKE '%$client_name%'";
                                                 
-                                                // Fix: Use single = for comparison in SQL, not ==
-                                                $sql = "SELECT * FROM addneworder WHERE id = '$suit_no'";
+                                                if (is_numeric($suit_no)) {
+                                                    // Search by suit_no (only one record)
+                                                    $sql = "SELECT * FROM addneworder WHERE `id` = '$suit_no' LIMIT 1";
+                                                } else  {
+                                                    // Search by client_name (all matching records)
+                                                    $sql = "SELECT * FROM addneworder WHERE `client_name` LIKE '%$suit_no%'";
+                                                } 
                                                 $result = mysqli_query($conn, $sql);
-                                                // Check if query was successful
+                                                
                                                 if ($result === false) {
-                                                    die("SQL Error: " . mysqli_error($conn)); // Display SQL error for debugging
+                                                    // die("SQL Error: " . mysqli_error($conn));
+                                                    // die($_SESSION['error'] = "SQL Error: " . mysqli_error($conn));
+                                                    $showError = "SQL Error: " . mysqli_error($conn);
+                                                    die($showError);
                                                 }
+        
                                                 $total_rows = mysqli_num_rows($result);
                                                 // var_dump($total_rows);
+                                                // exit;
+                                                
                                                                                                                            
                                                 if($total_rows > 0) {
                                                     $number = 1;
@@ -112,7 +127,7 @@
                                                 } else {
                                                     echo "<tr><td colspan='8' class='text-center' style='color:red;'>No Suit Booked against this Number</td></tr>";
                                                 }
-                                            }
+                                            // }
                                         }   
                                 ?>
 

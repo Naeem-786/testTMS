@@ -381,6 +381,74 @@ $("#paid_amount").on("input", function() {
     calculatePaidAmount();
 });
 
+// // gatepass generation pdf file ajax
+// $('#add_new_order').click(function(e) {  //#add_new_order is a form submission id
+//     e.preventDefault();
+
+//     // Serialize form data
+//     var formData = new FormData($('#order_form')[0]);  //#order_form is a form id
+//     formData.set('action', 'invoice_pdf'); // Set the action to 'invoice_pdf'
+//     // formData.set('gatePass_vendor', $('#gatePass_vendor').val()); // Set the vendor name    
+
+//     $.ajax({
+//         type: 'POST',
+//         url: 'core.php',
+//         data: formData,
+//         catch: false,
+//         processData: false,
+//         contentType: false,
+
+//         success: function(response) {
+//             console.log("Response received:", response); // Log the response for debugging
+
+//             if (response.trim() !== '') {
+//                 // it'll remove all backslashes from the generated pdf file link like this {"success":true,"pdfUrl":".\/uploads\/certificate_362.pdf"}
+//                 var trimdata = response.replace(/\\/g, '');
+//                 //now backslashes removed and parse the JSON
+//                 var resp = JSON.parse(trimdata); // Parse the JSON response
+
+//                 console.log("Trimed response received:", resp); // Log the response for debugging
+//                 // Check if the response indicates success
+//                 if (resp.success) {
+//                     var pdfUrl = resp.pdfUrl;
+
+//                     $("#success_message").html(
+//                         "From data Uploaded Successfully & Generate Invoice").slideDown();
+
+//                     $("#error_message").slideUp();
+
+//                     // Create blob link to download
+//                     const link = document.createElement('a');
+//                     link.href = pdfUrl;
+//                     link.setAttribute('download', pdfUrl);
+
+//                     document.body.appendChild(link);
+//                     link.click();
+//                     document.body.removeChild(link);
+//                 } else {
+//                     $("#error_message").html("All fields are required").slideDown();
+//                     $("#success_message").slideUp();
+
+//                     // console.error("Error in response:", resp); // Log response details for debugging
+//                     // Handle error response
+//                     // alert("An error occurred while generating the PDF. Please try again later.");
+//                 }
+//             } else {
+//                 $("#error_message").html("Empty response received").slideDown();
+//                 $("#success_message").slideUp();
+//                 // console.error("Empty response received"); // Log empty response error for debugging
+//                 // Handle empty response
+//                 alert(
+//                     "An unexpected empty response was received from the server. Please try again later."
+//                     );
+//             }
+//             // THIS'll empty form after submission form data into db
+//             $('#gatePass')[0].reset();
+//         }
+
+//     });
+
+// });
 
 $(document).ready(function() {
 

@@ -385,7 +385,8 @@ $('#generate_gate_pass').click(function(e) {
 
     // Serialize form data
     var formData = new FormData($('#gatePass')[0]);
-    formData.set('action', 'gatePass_pdf_file_by_ajax');
+    formData.set('action', 'invoice_pdf'); // Set the action to 'invoice_pdf'
+    // formData.set('gatePass_vendor', $('#gatePass_vendor').val()); // Set the vendor name    
 
     $.ajax({
         type: 'POST',
@@ -410,7 +411,7 @@ $('#generate_gate_pass').click(function(e) {
                     var pdfUrl = resp.pdfUrl;
 
                     $("#success_message").html(
-                        "From data Uploaded Successfully & Generate PDF file").slideDown();
+                        "From data Uploaded Successfully & Generate Invoice").slideDown();
 
                     $("#error_message").slideUp();
 

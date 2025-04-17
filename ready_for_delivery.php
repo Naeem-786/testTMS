@@ -27,7 +27,7 @@
                 <div class="table-responsive" id="raw_category">
                     
 
-                    <table id="myTable" class="table  datanew">
+                    <table id="myTable" class="table">
                         <thead>
                             <?php
                                 // Query to count total orders
@@ -51,7 +51,7 @@
                         </thead>
                         <tbody>
                             <?php                               
-                                $query = "SELECT * FROM addneworder WHERE progress_suit IN ('ready_for_delivery') ORDER BY date DESC";                              
+                                $query = "SELECT * FROM addneworder WHERE progress_suit IN ('ready_for_delivery') ORDER BY date DESC";                             
                                 
                                 $db_table_data = mysqli_query($conn, $query);
                                 $total_rows = mysqli_num_rows($db_table_data);
@@ -94,8 +94,8 @@
 </div>
 
 <script>
-
 $(document).ready(function() {
+
 
     // delete Raw category code through sweetalert ajax
     $('.table-responsive').on('click', '.delete_btn', function(e) {
